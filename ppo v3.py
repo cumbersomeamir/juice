@@ -30,6 +30,7 @@ class PPO:
         self.optimizer = Adam(self.model.parameters(), lr=self.learning_rate)
 
     def update(self, rewards, log_probs_old, states, actions):
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         for _ in range(self.num_epochs):
             log_probs_all, values = self.evaluate_actions(states, actions)
             for i in range(len(rewards)):
@@ -72,6 +73,7 @@ class PPO:
         return action.item(), dist.log_prob(action), values
 
     def evaluate_actions(self, states, actions) -> Tuple[torch.Tensor, torch.Tensor]:
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         with torch.no_grad():
             input_ids = [self.tokenizer.encode(state) for state in states]
             input_ids = self.tokenizer.pad({"input_ids": input_ids}, return_tensors="pt").to(device)
@@ -86,6 +88,7 @@ class PPO:
         return log_probs, values
 
 def create_dataset(model, tokenizer, prompts1, completions1, device) -> Tuple:
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     # A very simple dataset to simulate human feedback
     prompts = prompts1
     completions = completions1
@@ -112,6 +115,7 @@ def create_dataset(model, tokenizer, prompts1, completions1, device) -> Tuple:
     return states, actions, rewards
 
 def evaluate(model, tokenizer, input_sentences, expected_output_sentences, device):
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     correct_count = 0
     total_count = len(input_sentences)
 
