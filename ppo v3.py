@@ -84,7 +84,7 @@ class PPO:
 
         return log_probs, values
 
-def create_dataset(model, tokenizer, prompts1, completions1) -> Tuple:
+def create_dataset(model, tokenizer, prompts1, completions1, device) -> Tuple:
     # A very simple dataset to simulate human feedback
     prompts = prompts1
     completions = completions1
@@ -110,7 +110,7 @@ def create_dataset(model, tokenizer, prompts1, completions1) -> Tuple:
 
     return states, actions, rewards
 
-def evaluate(model, tokenizer, input_sentences, expected_output_sentences):
+def evaluate(model, tokenizer, input_sentences, expected_output_sentences, device):
     correct_count = 0
     total_count = len(input_sentences)
 
@@ -157,7 +157,7 @@ def main():
     tokenizer = AutoTokenizer.from_pretrained("EleutherAI/gpt-neo-2.7B")
     tokenizer.pad_token = tokenizer.eos_token
 
-    states, actions, rewards = create_dataset(model, tokenizer, prompts, completions)
+    states, actions, rewards = create_dataset(model, tokenizer, prompts, completions, device)
     ppo = PPO(model, tokenizer)
 
     # Evaluation data
@@ -171,7 +171,7 @@ def main():
     ]
 
     # Evaluate the base model
-    base_model_score = evaluate(model, tokenizer, input_sentences, expected_output_sentences)
+    base_model_score = evaluate(model, tokenizer, input_sentences, expected_output_sentences, device)
     print(f"Base model score: {base_model_score}")
 
     for _ in range(10):  # Train for 10 iterations
