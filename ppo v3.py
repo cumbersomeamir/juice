@@ -62,7 +62,7 @@ class PPO:
 
     def act(self, state):
         with torch.no_grad():
-            input_ids = self.tokenizer.encode(state, return_tensors="pt").to(device)
+            input_ids = self.tokenizer.encode(state, return_tensors="pt").to(self.device)
             outputs = self.model(input_ids=input_ids)
             logits = outputs.logits[:, -1, :]
             values = torch.tensor([0.0])  # We do not use values in this example
@@ -76,8 +76,8 @@ class PPO:
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         with torch.no_grad():
             input_ids = [self.tokenizer.encode(state) for state in states]
-            input_ids = self.tokenizer.pad({"input_ids": input_ids}, return_tensors="pt").to(device)
-            attention_mask = torch.ones_like(input_ids["input_ids"]).to(device)
+            input_ids = self.tokenizer.pad({"input_ids": input_ids}, return_tensors="pt").to(self.device)
+            attention_mask = torch.ones_like(input_ids["input_ids"]).to(self.device)
             outputs = self.model(input_ids=input_ids["input_ids"], attention_mask=attention_mask)
             logits = outputs.logits[:, -1, :]
             values = torch.tensor([0.0] * len(states))  # We do not use values in this example
@@ -99,8 +99,8 @@ def create_dataset(model, tokenizer, prompts1, completions1, device) -> Tuple:
 
     for prompt, completion in zip(prompts, completions):
         target_token_ids = tokenizer.encode(completion, add_special_tokens=False)
-        input_ids = tokenizer.encode(prompt, return_tensors="pt").to(device)
-        attention_mask = torch.ones_like(input_ids).to(device)
+        input_ids = tokenizer.encode(prompt, return_tensors="pt").to(PPO.device)
+        attention_mask = torch.ones_like(input_ids).to(PPO.device)
 
         with torch.no_grad():
             outputs = model.generate(input_ids, attention_mask=attention_mask)
@@ -121,7 +121,7 @@ def evaluate(model, tokenizer, input_sentences, expected_output_sentences, devic
 
     for input_sentence, expected_output_sentence in zip(input_sentences, expected_output_sentences):
         prompt = input_sentence
-        input_ids = tokenizer.encode(prompt, return_tensors="pt").to(device)
+        input_ids = tokenizer.encode(prompt, return_tensors="pt").to(PPO.device)
 
         with torch.no_grad():
             outputs = model.generate(input_ids)
@@ -136,7 +136,6 @@ def evaluate(model, tokenizer, input_sentences, expected_output_sentences, devic
 def main():
 
     # Set the default device to GPU if available
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Using device: {device}")
 
     # Loading the RLHF dataset
