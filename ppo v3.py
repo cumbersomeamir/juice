@@ -9,6 +9,7 @@ import pandas as pd
 
 
 class PPO:
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     def __init__(
         self,
         model,
