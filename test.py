@@ -141,7 +141,7 @@ def main():
     # Loading the RLHF dataset
     prompts =[]
     completions = []
-    df = pd.read_excel('Juice Wrld smalll dataset.xlsx')
+    df = pd.read_excel('Juice Wrld small dataset.xlsx')
     print(df.columns)
     prompts =df['prompt']
     completions = df['completion']
