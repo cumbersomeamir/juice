@@ -195,6 +195,10 @@ def main():
     print(f"PPO-trained model score: {ppo_trained_model_score}")
 
     print("Performance improvement:", ppo_trained_model_score - base_model_score)
+    
+    #Saving the Model on huggingface
+    token = "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"
+    model.push_to_hub("Amirkid/juice-reborn", use_auth_token=token)
 
 if __name__ == "__main__":
     main()
