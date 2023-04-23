@@ -1,4 +1,4 @@
-#pip3 install gym transformers datasets openpyxl pandas sentencepiece protobuf
+#pip3 install gym transformers datasets openpyxl pandas sentencepiece protobuf protobuf==3.20
 
 import gym
 import torch
