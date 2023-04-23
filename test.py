@@ -1,3 +1,5 @@
+#pip3 install gym transformers datasets openpyxl pandas sentencepiece protobuf
+
 import gym
 import torch
 import numpy as np
