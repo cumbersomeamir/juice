@@ -1,3 +1,4 @@
+#pip3 install gym transformers datasets openpyxl pandas sentencepiece protobuf protobuf==3.20 torch
 import gym
 import torch
 import numpy as np
@@ -141,7 +142,7 @@ def main():
     # Loading the RLHF dataset
     prompts =[]
     completions = []
-    df = pd.read_excel('Juice Wrld small dataset.xlsx')
+    df = pd.read_excel('Juice Wrld dataset.xlsx')
     print(df.columns)
     prompts =df['prompt']
     completions = df['completion']
