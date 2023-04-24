@@ -199,7 +199,7 @@ def main():
     
     #Saving the Model on huggingface
     token = "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"
-    model.push_to_hub("Amirkid/juice-reborn", use_auth_token=token)
+    model.push_to_hub("Amirkid/juicewrld-v1", use_auth_token=token)
 
 if __name__ == "__main__":
     main()
