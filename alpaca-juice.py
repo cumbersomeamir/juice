@@ -135,7 +135,7 @@ def evaluate(model, tokenizer, input_sentences, expected_output_sentences, devic
     return correct_count / total_count
 
 def main():
-
+    count = 0
     # Set the default device to GPU if available
     print(f"Using device: {PPO.device}")
 
@@ -181,6 +181,8 @@ def main():
     print(f"Base model score: {base_model_score}")
 
     for _ in range(10):  # Train for 10 iterations
+        count = count + 1
+        print("The number of iteration is ", count)
         log_probs_old, values = [], []
         for state in states:
             action, log_prob, value = ppo.act(state)
