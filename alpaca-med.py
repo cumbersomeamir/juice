@@ -5,7 +5,7 @@ import numpy as np
 from torch.optim import Adam
 from torch.distributions import Categorical
 from typing import Tuple
-from transformers import AutoTokenizer, AutoConfig, AutoModelForCausalLM
+from transformers import AutoTokenizer, AutoConfig, LlamaForCausalLM, LlamaTokenizer
 import pandas as pd
 
 
@@ -152,15 +152,15 @@ def main():
     print(type(prompts))
     print(type(completions))
 
-    base_model = "learnanything/llama-7b-huggingface"
-    model = AutoModel.from_pretrained('learnanything/llama-7b-huggingface')
+    base_model = "huggyllama/llama-7b"
+    model = LlamaForCausalLM.from_pretrained('huggyllama/llama-7b')
     model.to(PPO.device)  # Move the model to the specified device
 
     # Set requires_grad=True for all parameters in the model
     for param in model.parameters():
         param.requires_grad = True
 
-    tokenizer = AutoTokenizer.from_pretrained("learnanything/llama-7b-huggingface")
+    tokenizer = LlamaTokenizer.from_pretrained("huggyllama/llama-7b")
     tokenizer.pad_token = tokenizer.eos_token
 
     states, actions, rewards = create_dataset(model, tokenizer, prompts, completions,PPO.device)
