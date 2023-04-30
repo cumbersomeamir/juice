@@ -142,7 +142,7 @@ def main():
     # Loading the RLHF dataset
     prompts =[]
     completions = []
-    df = pd.read_excel('MedQuad medium dataset.xlsx')
+    df = pd.read_excel('MedQuad dataset test.xlsx')
     print(df.columns)
     prompts =df['prompt']
     completions = df['completion']
@@ -180,18 +180,22 @@ def main():
     base_model_score = evaluate(model, tokenizer, input_sentences, expected_output_sentences,PPO.device)
     print(f"Base model score: {base_model_score}")
 
-    for _ in range(10):  # Train for 10 iterations
+    for _ in range(5):  # Train for 10 iterations
         count = count + 1
         print("The number of iteration is ", count)
         log_probs_old, values = [], []
         for state in states:
             action, log_prob, value = ppo.act(state)
             log_probs_old.append(log_prob.item())
+            print("The log probabilities are", log_probs_old)
             values.append(value.item())
+            print("The values are", values)
 
         log_probs_old = torch.tensor(log_probs_old)
         rewards = torch.tensor(rewards)
+        print("The rewards are", rewards)
         ppo.update(rewards, log_probs_old, states, actions)
+        print("PPO model updated number of iteration completed =", count)
 
     # Evaluate the PPO-trained model
     ppo_trained_model_score = evaluate(ppo.model, tokenizer, input_sentences, expected_output_sentences, PPO.device)
