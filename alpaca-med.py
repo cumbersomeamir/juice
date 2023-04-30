@@ -152,15 +152,15 @@ def main():
     print(type(prompts))
     print(type(completions))
 
-    base_model = "chavinlo/gpt4-x-alpaca"
-    model = AutoModelForCausalLM.from_pretrained("chavinlo/gpt4-x-alpaca")
+    base_model = "learnanything/llama-7b-huggingface"
+    model = AutoModel.from_pretrained('learnanything/llama-7b-huggingface')
     model.to(PPO.device)  # Move the model to the specified device
 
     # Set requires_grad=True for all parameters in the model
     for param in model.parameters():
         param.requires_grad = True
 
-    tokenizer = AutoTokenizer.from_pretrained("chavinlo/gpt4-x-alpaca")
+    tokenizer = AutoTokenizer.from_pretrained("learnanything/llama-7b-huggingface")
     tokenizer.pad_token = tokenizer.eos_token
 
     states, actions, rewards = create_dataset(model, tokenizer, prompts, completions,PPO.device)
